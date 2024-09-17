@@ -10,9 +10,10 @@ import com.example.gamescore.databinding.FragmentChooseLevelBinding
 import com.example.gamescore.domain.entity.Level
 
 class ChooseLevelFragment : Fragment() {
+    private val TAG = "ChooseLevelFragment"
     private var _binding: FragmentChooseLevelBinding? = null
     private val binding: FragmentChooseLevelBinding
-        get() = _binding ?: throw RuntimeException("Переменная $_binding равна null!")
+        get() = _binding ?: throw RuntimeException("${TAG}: Переменная $_binding равна null!")
 
     override fun onCreateView(
         inflater: LayoutInflater,

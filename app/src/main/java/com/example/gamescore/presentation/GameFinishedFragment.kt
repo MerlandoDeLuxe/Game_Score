@@ -1,5 +1,6 @@
 package com.example.gamescore.presentation
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -9,15 +10,19 @@ import android.view.ViewGroup
 import android.window.OnBackInvokedCallback
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.example.gamescore.R
 import com.example.gamescore.databinding.FragmentFinishedFameBinding
 import com.example.gamescore.domain.entity.GameResult
+import java.util.Locale
 
 class GameFinishedFragment : Fragment() {
+    private val TAG = "GameFinishedFragment"
     private var _binding: FragmentFinishedFameBinding? = null
     private val binding: FragmentFinishedFameBinding
-        get() = _binding ?: throw RuntimeException("Переменная $_binding равна null!")
+        get() = _binding ?: throw RuntimeException("${TAG}: Переменная $_binding равна null!")
 
     private lateinit var gameResult: GameResult
 
@@ -38,8 +43,18 @@ class GameFinishedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
-            textViewYourResult.text = String.format("%s", gameResult.countOfRightAnswers)
+            textViewYourResult.text = String.format(Locale.getDefault(), "%d", gameResult.countOfRightAnswers)
             buttonTryAgain.setOnClickListener { retryGame() }
+
+            var picDawable: Drawable? = null
+
+            if (gameResult.winner){
+                picDawable = context?.let { AppCompatResources.getDrawable(it,R.drawable.emoji_smile) }
+
+            }else{
+                picDawable = context?.let { AppCompatResources.getDrawable(it,R.drawable.emoji_sad) }
+            }
+            imageViewResultEmoji.setImageDrawable(picDawable)
         }
 
         val callback = object : OnBackPressedCallback(true) {
