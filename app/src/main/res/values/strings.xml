@@ -15,4 +15,6 @@
     <string name="required_percent_right_answers">Необходимый процент правильных ответов: %s</string>
     <string name="your_percent_result">Процент правильных ответов: %s</string>
     <string name="try_again_button">Попробовать снова</string>
+    <string name="welcomepageimage">WelcomePageImage</string>
+    <string name="begin_button">Начать</string>
 </resources>
