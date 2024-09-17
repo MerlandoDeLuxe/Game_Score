@@ -1,5 +1,6 @@
 package com.example.gamescore.domain.usecases
 
+import com.example.gamescore.domain.entity.GameSettings
 import com.example.gamescore.domain.entity.Question
 import com.example.gamescore.domain.repository.GameRepository
 

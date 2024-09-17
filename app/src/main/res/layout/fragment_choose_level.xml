@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textViewLevelChoose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="6dp"
+            android:text="@string/choose_level_label"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonTestLevel"
+            style="@style/ButtonLevelStyle"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#000000"
+            android:text="@string/test_level_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewLevelChoose" />
+
+        <Button
+            android:id="@+id/buttonEasyLevel"
+            style="@style/ButtonLevelStyle"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#8BC34A"
+            android:text="@string/easy_level_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonTestLevel" />
+
+        <Button
+            android:id="@+id/buttonMediumLevel"
+            style="@style/ButtonLevelStyle"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFC107"
+            android:text="@string/medium_level_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEasyLevel" />
+
+        <Button
+            android:id="@+id/buttonHardLevel"
+            style="@style/ButtonLevelStyle"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#C3160A"
+            android:text="@string/hard_level_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonMediumLevel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

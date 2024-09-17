@@ -4,6 +4,7 @@ import com.example.gamescore.domain.entity.GameSettings
 import com.example.gamescore.domain.entity.Level
 import com.example.gamescore.domain.entity.Question
 import com.example.gamescore.domain.repository.GameRepository
+import com.example.gamescore.domain.usecases.GenerateQuestionUseCase
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
@@ -33,7 +34,7 @@ object GameRepositoryImpl : GameRepository {
 
         //генерируем значения пока не получим необходимое количество неправильных вариантов ответов
         while (options.size < countOfOptions) {
-            options.add(Random.nextInt(from, to))
+            options.add(Random.nextInt(to, from))
         }
 
         return Question(sum, visibleNumber, options.toList())
