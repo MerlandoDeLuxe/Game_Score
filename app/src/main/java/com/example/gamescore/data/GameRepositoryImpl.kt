@@ -1,5 +1,6 @@
 package com.example.gamescore.data
 
+import android.util.Log
 import com.example.gamescore.domain.entity.GameSettings
 import com.example.gamescore.domain.entity.Level
 import com.example.gamescore.domain.entity.Question
@@ -10,42 +11,60 @@ import kotlin.math.min
 import kotlin.random.Random
 
 object GameRepositoryImpl : GameRepository {
+    private const val TAG = "GameRepositoryImpl"
 
     private const val MIN_SUM_VALUE = 2
     private const val MIN_ANSWER_VALUE = 1
 
 
     override fun generateQuestion(maxSumValue: Int, countOfOptions: Int): Question {
-        val sum = Random.nextInt(MIN_SUM_VALUE, maxSumValue + 1)    //Значение суммы в кружке
-        val visibleNumber = Random.nextInt(MIN_ANSWER_VALUE, sum)       //Видимое число в квадрате
-        val options = HashSet<Int>() //коллекция для уникальных вариантов ответов
-        val rightAnswer = sum - visibleNumber   //правильный ответ
-        options.add(rightAnswer)    //кладем правильный ответ в уникальную коллекцию HashSet
-        //нужно сгенерировать остальные вариантов ответов
-        //согласно логике они находятся в небольшом диапазоне от правильного ответа
+        val sum = makingRandomFigure(maxSumValue, MIN_SUM_VALUE)
+        val mark: String
 
-        //функция max вычисляет значение и, если оно оказывается отрицательным,
-        //то принимает from принимает значение MIN_ANSWER_VALUE,
-        //если оказывается положительным, то принимает значение rightAnswer - countOfOptions
-        val from = max(rightAnswer - countOfOptions, MIN_ANSWER_VALUE)
-        //нижняя граница диапазона. Либо максимальное значение всех элементов
-        //либо rightAnswer - countOfOptions
-        val to = min(maxSumValue, rightAnswer - countOfOptions)
+        var visibleNumber = 0
+        var rightAnswer = 0
 
-        //генерируем значения пока не получим необходимое количество неправильных вариантов ответов
-        while (options.size < countOfOptions) {
-            options.add(Random.nextInt(to, from))
+        do {
+            visibleNumber = makingRandomFigure(maxSumValue, MIN_SUM_VALUE)
+        } while (visibleNumber == sum)
+
+        if (makingRandomBoolean()) {
+            rightAnswer = sum + visibleNumber
+            mark = "+"
+        } else {
+            rightAnswer = sum - visibleNumber
+            mark = "-"
         }
 
-        return Question(sum, visibleNumber, options.toList())
+        Log.d(TAG, "generateQuestion: sum = $sum")
+        Log.d(TAG, "generateQuestion: visibleNumber = $visibleNumber")
+        Log.d(TAG, "generateQuestion: rightAnswer = $rightAnswer")
+        Log.d(TAG, "generateQuestion: mark = $mark")
+        val options: HashSet<Int> = hashSetOf(rightAnswer)
+        Log.d(TAG, "generateQuestion: options = $options")
+
+        while (options.size < countOfOptions) {
+            if (rightAnswer < 0) {
+                options.add(makingRandomFigure(maxSumValue, rightAnswer))   //Это чтобы в генерацию попадали числа отрицательные тоже, чтобы было интереснее
+            }
+            options.add(makingRandomFigure(maxSumValue, MIN_SUM_VALUE))
+        }
+        Log.d(TAG, "generateQuestion: options = $options")
+        return Question(sum, visibleNumber, rightAnswer, mark, options.toList())
     }
 
+    private fun makingRandomFigure(high: Int, low: Int): Int {
+        return Random.nextInt(high - low) + low
+    }
+
+    private fun makingRandomBoolean() = Random.nextBoolean()
+
     override fun getGameSettings(level: Level): GameSettings {
-        return when (level){
-            Level.TEST -> GameSettings(10,3,50,8)
-            Level.EASY -> GameSettings(10,10,70,60)
-            Level.MEDIUM -> GameSettings(20,20,80,40)
-            Level.HARD -> GameSettings(30,30,90,40)
+        return when (level) {
+            Level.TEST -> GameSettings(10, 3, 50, 8)
+            Level.EASY -> GameSettings(10, 10, 70, 20)
+            Level.MEDIUM -> GameSettings(20, 20, 80, 30)
+            Level.HARD -> GameSettings(30, 30, 90, 40)
         }
     }
 }

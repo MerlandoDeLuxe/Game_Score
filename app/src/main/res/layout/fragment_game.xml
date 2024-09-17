@@ -7,12 +7,15 @@
 
     <TextView
         android:id="@+id/textViewTimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
         android:layout_margin="8dp"
+        android:gravity="center"
         android:padding="6dp"
         android:textColor="@android:color/background_dark"
         android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintDimensionRatio="2:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,17 +24,31 @@
     <TextView
         android:id="@+id/textViewSum"
         style="@style/QuestionTextStyle"
-        android:layout_width="145dp"
-        android:layout_height="145dp"
+        android:layout_width="165dp"
+        android:layout_height="165dp"
         android:background="@drawable/cyrcle_background"
-        app:layout_constraintBottom_toTopOf="@+id/textViewLeftNumber"
+        app:layout_constraintBottom_toTopOf="@+id/textViewMark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTimer"
         tools:text="1" />
 
     <TextView
-        android:id="@+id/textViewLeftNumber"
+        android:id="@+id/textViewMark"
+        style="@style/QuestionTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:background="#20BAAB"
+        android:text="@string/mark"
+        app:layout_constraintBottom_toTopOf="@+id/textViewVisibleNumber"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSum" />
+
+    <TextView
+        android:id="@+id/textViewVisibleNumber"
         style="@style/QuestionTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -41,7 +58,7 @@
         app:layout_constraintEnd_toStartOf="@+id/textViewQuestion"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSum"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMark"
         app:layout_constraintVertical_bias="0.5"
         tools:text="7" />
 
@@ -52,11 +69,11 @@
         android:layout_height="wrap_content"
         android:background="#20BAAB"
         android:text="@string/question_mark"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewLeftNumber"
-        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewVisibleNumber"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewLeftNumber"
-        app:layout_constraintTop_toTopOf="@+id/textViewLeftNumber" />
+        app:layout_constraintStart_toEndOf="@+id/textViewVisibleNumber"
+        app:layout_constraintTop_toTopOf="@+id/textViewVisibleNumber" />
 
     <TextView
         android:id="@+id/textViewRightAnswers"
@@ -67,7 +84,7 @@
         app:layout_constraintBottom_toTopOf="@+id/progressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewLeftNumber"
+        app:layout_constraintTop_toBottomOf="@+id/textViewVisibleNumber"
         app:layout_constraintVertical_bias="0.5" />
 
     <ProgressBar
@@ -91,6 +108,7 @@
         style="@style/OptionTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:background="#4C810E"
         app:layout_constraintBottom_toTopOf="@+id/textViewOption_4"
         app:layout_constraintEnd_toStartOf="@+id/textViewOption_2"
@@ -113,6 +131,7 @@
         style="@style/OptionTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:background="#972469"
         app:layout_constraintBottom_toTopOf="@+id/textViewOption_6"
         app:layout_constraintEnd_toEndOf="parent"
@@ -124,6 +143,8 @@
         style="@style/OptionTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:background="#03A9F4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/textViewOption_5"
@@ -135,6 +156,7 @@
         style="@style/OptionTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:background="#E91E63"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="w,"
@@ -147,6 +169,8 @@
         style="@style/OptionTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:background="#3F51B5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

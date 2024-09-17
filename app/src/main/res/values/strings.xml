@@ -9,12 +9,13 @@
     <string name="hard_level_button">Тяжелый</string>
     <string name="choose_level_label">Выберите уровень сложности</string>
     <string name="question_mark">\?</string>
-    <string name="count_right_answers">Количество правильных ответов: %s (минимум %s)</string>
-    <string name="count_required_answers">Требуемое количество правильных ответов: %s</string>
-    <string name="your_result">Ваш результат: %s</string>
-    <string name="required_percent_right_answers">Необходимый процент правильных ответов: %s</string>
-    <string name="your_percent_result">Процент правильных ответов: %s</string>
+    <string name="count_right_answers">Количество правильных ответов: %d (минимум %d)</string>
+    <string name="count_required_answers">Требуемое количество правильных ответов: %d</string>
+    <string name="your_result">Ваш результат: %d</string>
+    <string name="required_percent_right_answers">Необходимый процент правильных ответов: %d</string>
+    <string name="your_percent_result">Процент правильных ответов: %d</string>
     <string name="try_again_button">Попробовать снова</string>
     <string name="welcomepageimage">WelcomePageImage</string>
     <string name="begin_button">Начать</string>
+    <string name="mark">+</string>
 </resources>
