@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Game Score</string>
-    <string name="game_rules">Правила игры: перед вами будет три фигуры, две снизу и одна сверху, в двух из них будут числа. Необходимо, чтобы сумма чисел из двух нижних фигур была равна числу в верхней фигуре, для этого нужно вставить недостающее число.\n\nПример: в верхнем круге число 7, в одном из нижних знак вопроса, а в другом число 4. Значит на месте вопросительного знака должно быть число 3, потому что 3 + 4 = 7</string>
+    <string name="game_rules">Правила игры: перед вами будет три фигуры, две снизу и одна сверху, в двух из них будут числа. Необходимо, чтобы сумма чисел из двух нижних фигур была равна числу в верхней фигуре, для этого нужно вставить недостающее число.\n\nПример: в верхнем круге число 7, в одном из нижних знак вопроса, а в другом число 4. Между ними знак сложения или вычитания. В нижней части экрана варианты ответов.</string>
     <string name="game_name">Состав числа</string>
     <string name="understand_button">Понятно</string>
     <string name="test_level_button">Тестовый</string>
@@ -10,10 +10,10 @@
     <string name="choose_level_label">Выберите уровень сложности</string>
     <string name="question_mark">\?</string>
     <string name="count_right_answers">Количество правильных ответов: %d (минимум %d)</string>
-    <string name="count_required_answers">Требуемое количество правильных ответов: %d</string>
-    <string name="your_result">Ваш результат: %d</string>
-    <string name="required_percent_right_answers">Необходимый процент правильных ответов: %d</string>
-    <string name="your_percent_result">Процент правильных ответов: %d</string>
+    <string name="count_required_answers">Требуемое количество правильных ответов: %s</string>
+    <string name="your_result">Ваш результат: %s</string>
+    <string name="required_percent_right_answers">Необходимый процент правильных ответов: %s</string>
+    <string name="your_percent_result">Процент правильных ответов: %s</string>
     <string name="try_again_button">Попробовать снова</string>
     <string name="welcomepageimage">WelcomePageImage</string>
     <string name="begin_button">Начать</string>

@@ -36,12 +36,7 @@ object GameRepositoryImpl : GameRepository {
             mark = "-"
         }
 
-        Log.d(TAG, "generateQuestion: sum = $sum")
-        Log.d(TAG, "generateQuestion: visibleNumber = $visibleNumber")
-        Log.d(TAG, "generateQuestion: rightAnswer = $rightAnswer")
-        Log.d(TAG, "generateQuestion: mark = $mark")
         val options: HashSet<Int> = hashSetOf(rightAnswer)
-        Log.d(TAG, "generateQuestion: options = $options")
 
         while (options.size < countOfOptions) {
             if (rightAnswer < 0) {
@@ -49,7 +44,7 @@ object GameRepositoryImpl : GameRepository {
             }
             options.add(makingRandomFigure(maxSumValue, MIN_SUM_VALUE))
         }
-        Log.d(TAG, "generateQuestion: options = $options")
+
         return Question(sum, visibleNumber, rightAnswer, mark, options.toList())
     }
 
