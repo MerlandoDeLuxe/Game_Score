@@ -3,20 +3,15 @@ package com.example.gamescore.presentation
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
-import android.window.OnBackInvokedCallback
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.gamescore.R
 import com.example.gamescore.databinding.FragmentFinishedFameBinding
 import com.example.gamescore.domain.entity.GameResult
-import java.util.Locale
 
 class GameFinishedFragment : Fragment() {
     private val TAG = "GameFinishedFragment"
@@ -42,27 +37,57 @@ class GameFinishedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(binding) {
-            textViewYourResult.text = String.format(Locale.getDefault(), "%d", gameResult.countOfRightAnswers)
-            buttonTryAgain.setOnClickListener { retryGame() }
-
-            var picDawable: Drawable? = null
-
-            if (gameResult.winner){
-                picDawable = context?.let { AppCompatResources.getDrawable(it,R.drawable.emoji_smile) }
-
-            }else{
-                picDawable = context?.let { AppCompatResources.getDrawable(it,R.drawable.emoji_sad) }
-            }
-            imageViewResultEmoji.setImageDrawable(picDawable)
-        }
-
+        getSmileImageResId()
+        bindViews()
+        setOnClickListeners()
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 retryGame()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    private fun bindViews() {
+        with(binding) {
+            binding.imageViewResultEmoji.setImageResource(getSmileImageResId())
+
+            var result = String.format(
+                requireContext().resources.getString(R.string.count_required_answers),
+                gameResult.gameSettings.minCountOfRightAnswers.toString()
+            )
+            textViewCountRequiredAnswers.text = result
+
+            result = String.format(
+                requireContext().resources.getString(R.string.your_result),
+                gameResult.countOfRightAnswers.toString()
+            )
+            textViewYourResult.text = result
+
+            result = String.format(
+                requireContext().resources.getString(R.string.required_percent_right_answers),
+                gameResult.gameSettings.minPercentOfRightAnswer.toString()
+            )
+            textViewRequiredPercentRightAnswers.text = result
+
+            result = String.format(
+                requireContext().resources.getString(R.string.your_percent_result),
+                gameResult.percentOfRightAnswers.toString()
+            )
+            textViewYourPercentResult.text = result
+        }
+    }
+
+    private fun getSmileImageResId(): Int {
+        return if (gameResult.winner) {
+            R.drawable.emoji_smile
+        } else {
+            R.drawable.emoji_sad
+        }
+    }
+
+    private fun setOnClickListeners() {
+        binding.buttonTryAgain.setOnClickListener { retryGame() }
     }
 
     private fun parseArgs() {

@@ -2,7 +2,6 @@ package com.example.gamescore.presentation
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.gamescore.R
 import com.example.gamescore.databinding.FragmentGameBinding
 import com.example.gamescore.domain.entity.GameResult
@@ -27,6 +25,13 @@ class GameFragment : Fragment() {
 
     private lateinit var level: Level
 
+    private val viewModelFactory by lazy {
+        GameViewModelFactory(level, requireActivity().application)
+    }
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(GameViewModel::class.java)
+    }
+
     private val textViewOptions by lazy {   //Если без lazy, то инициализация будет сразу
         mutableListOf<TextView>().apply {   //до вызова onViewCreated, т.е. вью еще не существует
             with(binding) {
@@ -38,11 +43,6 @@ class GameFragment : Fragment() {
                 add(textViewOption6)
             }
         }
-    }
-
-    private val viewModel: GameViewModel by lazy {
-        ViewModelProvider(this)
-            .get(GameViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,17 +64,10 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeAllElements()
+        updateTextViewLabelProgress()
+        setTimerText()
+        bindView()
 
-        with(binding) {
-            textViewBeginButton.visibility = TextView.VISIBLE
-            textViewBeginButton.setOnClickListener {
-                if (pressBegin()) {
-                    viewModel.startGame(level)
-                    observeViewModel()
-                    setupOnClickListeners()
-                }
-            }
-        }
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 retryGame()
@@ -83,12 +76,21 @@ class GameFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
+    private fun bindView() {
+        with(binding) {
+            textViewBeginButton.visibility = TextView.VISIBLE
+            textViewBeginButton.setOnClickListener {
+                if (pressBegin()) {
+                    viewModel.startGame()
+                    observeViewModel()
+                    setupOnClickListeners()
+                }
+            }
+        }
+    }
+
     private fun observeViewModel() {
         setNewQuestion()
-        setTimerText()
-        setTimerColor()
-        setProgressAnswers()
-        updateTextViewLabelProgress()
         updateProgressBar()
         finishGame()
         updateTextViewColor()
@@ -165,15 +167,9 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun setTimerColor(){
+    private fun setTimerColor() {
         viewModel.timerColor.observe(viewLifecycleOwner) {
             binding.textViewTimer.setTextColor(getColorByState(it))
-        }
-    }
-
-    private fun setProgressAnswers(){
-        viewModel.progressAnswers.observe(viewLifecycleOwner) {
-            binding.textViewRightAnswers.text = it
         }
     }
 

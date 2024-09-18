@@ -1,6 +1,7 @@
 package com.example.gamescore.presentation
 
 import android.app.Application
+import android.content.Context
 import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
@@ -18,11 +19,10 @@ import com.example.gamescore.domain.usecases.GetGameSettingsUseCase
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-class GameViewModel(application: Application) : AndroidViewModel(application) {
+class GameViewModel(private val level: Level, private val application: Application) :
+    ViewModel() {
     private val TAG = "GameViewModel"
     private val repository = GameRepositoryImpl
-
-    private val context = application
 
     private val generateQuestionUseCase = GenerateQuestionUseCase(repository)
     private val getGameSettingsUseCase = GetGameSettingsUseCase(repository)
@@ -30,7 +30,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private var maxSumValue = 0
     private lateinit var gameSettings: GameSettings
 
-    private lateinit var timer: CountDownTimer
+    private var timer: CountDownTimer? = null
 
     private val _formattedTimerText = MutableLiveData<String>()//Красивый вид отформатированного
     val formattedTimerText: LiveData<String>                    //текста таймера
@@ -73,11 +73,20 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private var countOfRightAnswers = 0
     private var countOfQuestions = 0
 
-    fun startGame(level: Level) {
-        getGameSettings(level)
-        startTimer()
-        generateQuestion()
+    init {
+        getGameSettings()
         updateProgress()
+        initializeTimer()
+    }
+
+    private fun initializeTimer() {
+        _formattedTimerText.value = formatTime(convertSecondsToLongForTimer())
+        Log.d(TAG, "initializeTimer: _formattedTimerText = ${_formattedTimerText.value}")
+    }
+
+    fun startGame() {
+        startTimer(convertSecondsToLongForTimer())
+        generateQuestion()
     }
 
     fun chooseAnswer(number: Int) {
@@ -86,11 +95,11 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         generateQuestion()
     }
 
-    fun updateProgress() {
+    private fun updateProgress() {
         val percent = calculatePercentOfRightAnswers()
         _percentOfRightAnswers.value = percent
         _progressAnswers.value = String.format(
-            context.resources.getString(R.string.count_right_answers),
+            application.resources.getString(R.string.count_right_answers),
             countOfRightAnswers,
             gameSettings.minCountOfRightAnswers
         )
@@ -116,7 +125,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         countOfQuestions++
     }
 
-    private fun getGameSettings(level: Level) {
+    private fun getGameSettings() {
         gameSettings = getGameSettingsUseCase(level)
         maxSumValue = gameSettings.maxSumValue
         _minPercentForCompleteLevel.value = gameSettings.minPercentOfRightAnswer
@@ -126,9 +135,27 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         _question.value = generateQuestionUseCase(maxSumValue)
     }
 
-    private fun startTimer() {
-        val longSeconds = gameSettings.gameTimeInSeconds.toLong() * MILLIS_IN_SECONDS
+    private fun finishGame() {
+        //Явные параметры указал просто для читаемости кода, они необязательны
+        val gameResult = percentOfRightAnswers.value?.let {
+            GameResult(
+                winner = enoughCountOfRightAnswers.value == true
+                        && enoughPercentOfRightAnswers.value == true,
+                countOfRightAnswers = countOfRightAnswers,
+                countOfQuestions = countOfQuestions,
+                percentOfRightAnswers = it,
+                gameSettings = gameSettings
+            )
+        }
+        _gameResult.value = gameResult
+        Log.d(TAG, "finishGame: gameResult: $gameResult")
+    }
 
+    private fun convertSecondsToLongForTimer(): Long {
+        return gameSettings.gameTimeInSeconds.toLong() * MILLIS_IN_SECONDS
+    }
+
+    private fun startTimer(longSeconds: Long) {
         timer = object : CountDownTimer(longSeconds, MILLIS_IN_SECONDS) {
             override fun onTick(millis: Long) {
                 val seconds = TimeUnit.MILLISECONDS.toSeconds(millis)
@@ -153,19 +180,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
 
         return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
-    }
-
-    private fun finishGame() {
-        //Явные параметры указал просто для читаемости кода, они необязательны
-        val gameResult = GameResult(
-            winner = enoughCountOfRightAnswers.value == true
-                    && enoughPercentOfRightAnswers.value == true,
-            countOfRightAnswers = countOfRightAnswers,
-            countOfQuestions = countOfQuestions,
-            gameSettings = gameSettings
-        )
-        _gameResult.value = gameResult
-        Log.d(TAG, "finishGame: gameResult: $gameResult")
     }
 
     override fun onCleared() {

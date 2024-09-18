@@ -18,8 +18,8 @@
     <TextView
         android:id="@+id/textViewCountRequiredAnswers"
         style="@style/TextViewResults"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="294dp"
+        android:layout_height="53dp"
         android:singleLine="false"
         android:text="@string/count_required_answers"
         app:layout_constraintBottom_toTopOf="@+id/textViewYourResult"
@@ -40,16 +40,16 @@
     <TextView
         android:id="@+id/textViewRequiredPercentRightAnswers"
         style="@style/TextViewResults"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="297dp"
+        android:layout_height="54dp"
         android:layout_marginStart="8dp"
         android:text="@string/required_percent_right_answers"
-        app:layout_constraintBottom_toTopOf="@+id/textViewyYourPercentResult"
+        app:layout_constraintBottom_toTopOf="@+id/textViewYourPercentResult"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewYourResult" />
 
     <TextView
-        android:id="@+id/textViewyYourPercentResult"
+        android:id="@+id/textViewYourPercentResult"
         style="@style/TextViewResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
