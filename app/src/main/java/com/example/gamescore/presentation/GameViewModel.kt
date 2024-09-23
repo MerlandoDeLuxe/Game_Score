@@ -1,10 +1,8 @@
 package com.example.gamescore.presentation
 
 import android.app.Application
-import android.content.Context
 import android.os.CountDownTimer
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -72,6 +70,7 @@ class GameViewModel(private val level: Level, private val application: Applicati
 
     private var countOfRightAnswers = 0
     private var countOfQuestions = 0
+    private var percentOfRightAnswersForCreateGameResult = 0
 
     init {
         getGameSettings()
@@ -96,8 +95,8 @@ class GameViewModel(private val level: Level, private val application: Applicati
     }
 
     private fun updateProgress() {
-        val percent = calculatePercentOfRightAnswers()
-        _percentOfRightAnswers.value = percent
+        percentOfRightAnswersForCreateGameResult = calculatePercentOfRightAnswers()
+        _percentOfRightAnswers.value = percentOfRightAnswersForCreateGameResult
         _progressAnswers.value = String.format(
             application.resources.getString(R.string.count_right_answers),
             countOfRightAnswers,
@@ -106,7 +105,8 @@ class GameViewModel(private val level: Level, private val application: Applicati
 
         _enoughCountOfRightAnswers.value =
             countOfRightAnswers >= gameSettings.minCountOfRightAnswers
-        _enoughPercentOfRightAnswers.value = percent >= gameSettings.minPercentOfRightAnswer
+        _enoughPercentOfRightAnswers.value =
+            percentOfRightAnswersForCreateGameResult >= gameSettings.minPercentOfRightAnswer
     }
 
     private fun calculatePercentOfRightAnswers(): Int {
@@ -137,17 +137,16 @@ class GameViewModel(private val level: Level, private val application: Applicati
 
     private fun finishGame() {
         //Явные параметры указал просто для читаемости кода, они необязательны
-        val gameResult = percentOfRightAnswers.value?.let {
-            GameResult(
-                winner = enoughCountOfRightAnswers.value == true
-                        && enoughPercentOfRightAnswers.value == true,
-                countOfRightAnswers = countOfRightAnswers,
-                countOfQuestions = countOfQuestions,
-                percentOfRightAnswers = it,
-                gameSettings = gameSettings
-            )
-        }
+        val gameResult = GameResult(
+            winner = enoughCountOfRightAnswers.value == true
+                    && enoughPercentOfRightAnswers.value == true,
+            countOfRightAnswers = countOfRightAnswers,
+            countOfQuestions = countOfQuestions,
+            percentOfRightAnswers = percentOfRightAnswersForCreateGameResult,
+            gameSettings = gameSettings
+        )
         _gameResult.value = gameResult
+
         Log.d(TAG, "finishGame: gameResult: $gameResult")
     }
 
